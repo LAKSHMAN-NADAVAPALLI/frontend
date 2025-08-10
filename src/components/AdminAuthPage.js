@@ -12,12 +12,13 @@ const AdminAuthPage = ({ onLoginSuccess }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    document.title = isLogin ? 'Admin Login | Job Portal' : 'Admin Signup | Job Portal';
+    document.title = isLogin ? 'Admin Login | AI CYBER SHIELD' : 'Admin Signup | AI CYBER SHIELD';
   }, [isLogin]);
 
   const handleAdminSubmit = useCallback(async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setMessage('');
     const axios = (await import('axios')).default;
 
     const endpoint = isLogin
@@ -38,8 +39,15 @@ const AdminAuthPage = ({ onLoginSuccess }) => {
           return;
         }
 
-        const decodedPayload = JSON.parse(atob(token.split('.')[1]));
-        const role = decodedPayload.role;
+        let role = '';
+        try {
+          const decodedPayload = JSON.parse(atob(token.split('.')[1]));
+          role = decodedPayload.role;
+        } catch (decodeErr) {
+          console.error('Token decode error:', decodeErr);
+          setMessage('❌ Invalid token structure.');
+          return;
+        }
 
         if (role !== 'ADMIN') {
           setMessage('❌ Access Denied. Not an Admin.');
@@ -51,11 +59,16 @@ const AdminAuthPage = ({ onLoginSuccess }) => {
         if (onLoginSuccess) onLoginSuccess(role);
         navigate('/admin-dashboard');
       } else {
-        setMessage('✅ Admin registered successfully!');
+        setMessage('✅ Admin registered successfully! You can now log in.');
+        setIsLogin(true);
       }
     } catch (err) {
-      console.error(err);
-      setMessage('❌ Error during authentication.');
+      console.error('Auth error:', err);
+      if (err.response && err.response.data && err.response.data.message) {
+        setMessage(`❌ ${err.response.data.message}`);
+      } else {
+        setMessage('❌ Error during authentication. Please try again.');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -67,7 +80,10 @@ const AdminAuthPage = ({ onLoginSuccess }) => {
         <div className="admin-auth-left">
           <h2>Admin Portal</h2>
           <p>Manage the platform by logging into your admin account</p>
-          <button onClick={() => setIsLogin(!isLogin)}>
+          <button onClick={() => {
+            setIsLogin(!isLogin);
+            setMessage('');
+          }}>
             {isLogin ? 'Create Admin Account' : 'Already Admin? Login'}
           </button>
         </div>

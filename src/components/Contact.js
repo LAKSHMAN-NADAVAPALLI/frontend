@@ -101,10 +101,10 @@ const Contact = () => {
           <h2>Contact Information</h2>
           <ul className="contact-info-list">
             <li>
-              <strong>Email:</strong> <a href="mailto:info@cybershield.ai">info@cybershield.ai</a>
+              <strong>Email:</strong> <a href="mailto:nvpsslakshman@gmail.com">info@cybershield.ai</a>
             </li>
             <li>
-              <strong>Phone:</strong> <a href="tel:+1234567890">+1 (234) 567-890</a>
+              <strong>Phone:</strong> <a href="tel:9346716905">+1 (234) 567-890</a>
             </li>
             <li>
               <strong>Address:</strong> 123 Cyber Lane, Tech City, TC 12345

@@ -12,7 +12,7 @@ const AuthPage = ({ onLoginSuccess }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    document.title = isLogin ? 'Login | Job Portal' : 'Register | Job Portal';
+    document.title = isLogin ? 'Login | AI CYBER SHIELD' : 'Register | AI CYBER SHIELD';
   }, [isLogin]);
 
   const handleSubmit = useCallback(async (e) => {
