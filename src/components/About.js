@@ -1,12 +1,25 @@
-import React from 'react';
-import { Helmet } from 'react-helmet-async';
-import './About.css';
+import React, { useState, useRef, useEffect } from "react";
+import { Helmet } from "react-helmet-async";
+import "./About.css";
 
 // Placeholder image imports (replace with actual image paths)
-import teamImg from '../asserts/team.jpg';
-import techImg from '../asserts/tech.avif';
+import teamImg from "../asserts/team.jpg";
+import techImg from "../asserts/tech.avif";
 
 const About = () => {
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
     <div className="about-container min-h-screen flex flex-col">
       <Helmet>
@@ -27,7 +40,30 @@ const About = () => {
                 {item}
               </a>
             ))}
-            <a href="/login" className="about-nav-link">Login</a>
+
+            {/* Dropdown for Login */}
+            <div className="relative" ref={dropdownRef}>
+              <button
+                type="button"
+                className="nav-link"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setShowDropdown((prev) => !prev);
+                }}
+              >
+                Login ▾
+              </button>
+              {showDropdown && (
+                <div className="dropdown-menu">
+                  <a href="/login/user" onClick={(e) => e.stopPropagation()}>
+                    User
+                  </a>
+                  <a href="/login/admin" onClick={(e) => e.stopPropagation()}>
+                    Admin
+                  </a>
+                </div>
+              )}
+            </div>
           </nav>
         </div>
       </header>
@@ -39,24 +75,40 @@ const About = () => {
             About CyberShield AI
           </h2>
           <p className="text-lg text-[#4a5568] max-w-3xl mx-auto">
-            CyberShield AI is at the forefront of cybersecurity innovation, leveraging artificial intelligence to protect organizations from evolving digital threats.
+            CyberShield AI is at the forefront of cybersecurity innovation,
+            leveraging artificial intelligence to protect organizations from
+            evolving digital threats.
           </p>
         </section>
 
         {/* Mission Section */}
         <section className="bg-white p-8 md:p-12 rounded-lg shadow-lg max-w-6xl mx-auto text-left mb-16">
-          <h3 className="text-3xl font-bold text-[#0a2540] mb-4">Our Mission</h3>
+          <h3 className="text-3xl font-bold text-[#0a2540] mb-4">
+            Our Mission
+          </h3>
           <p className="text-[#4a5568] mb-6">
-            Our mission is to empower businesses with proactive, AI-driven cybersecurity solutions that anticipate and neutralize threats before they cause harm. We aim to make digital environments secure, reliable, and resilient.
+            Our mission is to empower businesses with proactive, AI-driven
+            cybersecurity solutions that anticipate and neutralize threats
+            before they cause harm. We aim to make digital environments secure,
+            reliable, and resilient.
           </p>
-          <img src={teamImg} alt="Our Team" className="about-img rounded-lg shadow-md hover:scale-105 transition-transform" />
+          <img
+            src={teamImg}
+            alt="Our Team"
+            className="about-img rounded-lg shadow-md hover:scale-105 transition-transform"
+          />
         </section>
 
         {/* Technology Section */}
         <section className="bg-white p-8 md:p-12 rounded-lg shadow-lg max-w-6xl mx-auto text-left mb-16">
-          <h3 className="text-3xl font-bold text-[#0a2540] mb-4">Our Technology</h3>
+          <h3 className="text-3xl font-bold text-[#0a2540] mb-4">
+            Our Technology
+          </h3>
           <p className="text-[#4a5568] mb-6">
-            CyberShield AI combines machine learning, behavioral analytics, and real-time threat intelligence to deliver unmatched protection. Our platform adapts to new threats, ensuring your organization stays one step ahead.
+            CyberShield AI combines machine learning, behavioral analytics, and
+            real-time threat intelligence to deliver unmatched protection. Our
+            platform adapts to new threats, ensuring your organization stays one
+            step ahead.
           </p>
           <ul className="list-disc list-inside text-[#4a5568] mb-6">
             <li>Advanced Machine Learning Models</li>
@@ -64,16 +116,26 @@ const About = () => {
             <li>Real-Time Threat Intelligence Integration</li>
             <li>Scalable Cloud-Based Infrastructure</li>
           </ul>
-          <img src={techImg} alt="Technology" className="about-img rounded-lg shadow-md hover:scale-105 transition-transform" />
+          <img
+            src={techImg}
+            alt="Technology"
+            className="about-img rounded-lg shadow-md hover:scale-105 transition-transform"
+          />
         </section>
 
         {/* Call to Action */}
         <section className="text-center max-w-4xl mx-auto">
-          <h3 className="text-3xl font-bold text-[#0a2540] mb-4">Join the Future of Cybersecurity</h3>
+          <h3 className="text-3xl font-bold text-[#0a2540] mb-4">
+            Join the Future of Cybersecurity
+          </h3>
           <p className="text-[#4a5568] mb-6">
-            Partner with CyberShield AI to safeguard your digital assets with cutting-edge technology.
+            Partner with CyberShield AI to safeguard your digital assets with
+            cutting-edge technology.
           </p>
-          <a href="/contact" className="about-cta bg-[#0056d2] text-white px-6 py-3 rounded-lg hover:bg-[#003bb5] transition-colors">
+          <a
+            href="/contact"
+            className="about-cta bg-[#0056d2] text-white px-6 py-3 rounded-lg hover:bg-[#003bb5] transition-colors"
+          >
             Contact Us
           </a>
         </section>
